@@ -1,0 +1,66 @@
+2017-09-08 15:41:11 INFO  cluster:71 - Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2017-09-08 15:41:11 INFO  connection:71 - Opened connection [connectionId{localValue:1, serverValue:109}] to localhost:27017
+2017-09-08 15:41:11 INFO  cluster:71 - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[3, 4, 1]}, minWireVersion=0, maxWireVersion=5, maxDocumentSize=16777216, roundTripTimeNanos=954671}
+2017-09-08 15:41:34 INFO  ExchangeRatesDaoImpl:52 - Getting latest rate for euro to usd from: http://api.fixer.io/latest?symbols=USD
+2017-09-08 15:41:34 INFO  ExchangeRatesDaoImpl:67 - {
+  "FROM": "EUR",
+  "TO": "USD",
+  "rates": {
+    "2017-9-7": [
+      {
+        "time": "Thu Sep 07 00:00:00 IST 2017",
+        "conversionRate": 1.1971
+      }
+    ]
+  }
+}
+2017-09-08 15:41:59 INFO  ExchangeRateInsightsService:28 - Generating report from: 2017-09-02 to 2017-09-05 
+2017-09-08 15:41:59 INFO  connection:71 - Opened connection [connectionId{localValue:2, serverValue:110}] to localhost:27017
+2017-09-08 15:41:59 INFO  ExchangeRatesDaoImpl:95 - {
+  "FROM": "EUR",
+  "TO": "USD",
+  "rates": {
+    "2017-9-5": [
+      {
+        "time": "Tue Sep 05 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      },
+      {
+        "time": "Tue Sep 05 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      }
+    ],
+    "2017-9-4": [
+      {
+        "time": "Mon Sep 04 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      },
+      {
+        "time": "Mon Sep 04 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      },
+      {
+        "time": "Mon Sep 04 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      },
+      {
+        "time": "Mon Sep 04 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      },
+      {
+        "time": "Mon Sep 04 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      }
+    ],
+    "2017-9-3": [
+      {
+        "time": "Sun Sep 03 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      },
+      {
+        "time": "Sun Sep 03 00:00:00 IST 2017",
+        "conversionRate": 1.1905
+      }
+    ]
+  }
+}

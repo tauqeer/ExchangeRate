@@ -1,0 +1,116 @@
+DEPLOYMENT STEPS:
+=================
+Exchange Rate application is a J2EE web application containing various rest services.
+Configuration is depending upon environment variable STORAGE_PROPERTIES.
+
+eg:- export STORAGE_PROPERTIES=/dev/mirza/big-data/application.properties
+
+* Log level and log file location needs to be mentioned under log4j.properties
+
+EXECUTION STEPS:
+================
+This application is containing multiple modules, various modules needs to be started in particular sequence.
+
+=======================================================
+STEP-1: STEPS BEFORE RUNNING PRODUCER
+=======================================================
+1.> Register Kafka Topic and mention same topic in application.properties 
+	a.> Start zookeeper server using below command:
+	 	<KAFKA_DIR>/bin/zookeeper-server-start.sh ../config/zookeeper.properties
+	 	
+	 	Eg:-
+	 	cd $KAFKA_HOME/bin
+	 	./zookeeper-server-start.sh ../config/zookeeper.properties
+	 	
+	b.> Start Kafka server using below command:
+		<KAFKA_DIR>/bin/kafka-server-start.sh ../config/server.properties
+		
+		Eg:-
+		./kafka-server-start.sh ../config/server.properties 
+		
+	c.> Register kafka topic using below command
+		<KAFKA_DIR>/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic exchangeRate
+
+	d.> Topic name registered needs to be mentioned under property “kafka.topic.name” of $STORAGE_PROPERTIES
+
+=======================================
+STEP-2: PRODUCER LIFECYCLE AND ENDPOINT
+=======================================
+
+	a.> Keep property "kafka.producer.status" in $STORAGE_PROPERTIES to start producer
+		Eg:-
+		kafka.producer.status=start
+		
+		Once started property file is changed to running
+	
+	b.> If you want to stop producer change the property to stop
+		kafka.producer.status=stop
+
+	c.> Frequency of producer can be configured based on “kafka.producer.freq” property of $STORAGE_PROPERTIES
+
+	d.> Producer can be started by invoking rest service:
+		http://<ip>:<port>/ExchangeRateInsights/finance/controllers/startProducer
+		
+		Eg:-
+		http://localhost:9090/ExchangeRateInsights/finance/controllers/startProducer
+	
+	
+	* 	Producer is based on Kafka, it reads external service for latest exchange rate and pushes data in kafka.
+		External service used is http://api.fixer.io/latest, it needs to be mentioned under “kafka.topic.rest.url” property of $STORAGE_PROPERTIES
+	
+============================================
+STEP-3: Listener Endpoint and configurations
+============================================
+
+	a.> Url for spark application needs to be mentioned in property “spark.master.url” of $STORAGE_PROPERTIES
+	b.> Frequency of listener application needs to be mentioned under property “spark.streaming.freq” of $STORAGE_PROPERTIES file.
+	c.> Listener can be started by using below url:
+		http://<ip>:<port>/ExchangeRateInsights/finance/controllers/startStreaming
+		
+		Eg:-
+		http://localhost:9090/ExchangeRateInsights/finance/controllers/startStreaming
+
+	d.> Mongodb details needs to be mentioned in below properties of $STORAGE_PROPERTIES file.
+
+		datasource.hostname=localhost
+		datasource.port=27017
+		datasource.dbname=finance
+		datasource.collection=currency
+	
+	
+	* Listener is a apache spark streaming application integrated with kafka, it listens to topic mentioned in $STORAGE_PROPERTIES file. Messages read are transformed and stored in mongodb. Spark-Mongo driver is used for storing data in database.
+
+=============================================
+STEP-4: Getting insights from historical data
+=============================================
+	
+	Once data is ingested into db, user can insights like historical data from db.
+	
+	<a> For Historical Data, invoke below url:
+		http://<ip>:<port>/ExchangeRateInsights/finance/insights/getHistoryData?startDate=2017-09-02&endDate=2017-09-05
+		
+		Data format generated is mentioned in attached excel.
+		
+		
+	<b> For Latest Data, invoke below url:
+		http://<ip>:<port>/ExchangeRateInsights/finance/insights/getLatestRate
+		
+		Data format generated is mentioned in attached excel.
+		
+		
+=======================================
+STEP-5: Code compilation and Test cases
+=======================================
+	COMPILATION STEPS:
+
+	a.> export STORAGE_PROPERTIES=/dev/mirza/exchangerate/application.properties
+
+	b.> mvn clean install
+
+	* Above command will generate war file which can be deployed in application server.
+
+	c.> mvn test
+	* Above command will execute test cases and generate report in directory mentioned in logs.
+	Use below commands in order to run test cases
+
+	
