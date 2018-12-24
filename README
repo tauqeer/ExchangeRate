@@ -1,3 +1,9 @@
+
+This project is a microservice holding spark streaming process which constantly checks the currency exchange rate from Euro to USD (1 Euro = x Dollar). 
+Checked period is configurable and results are stored in Mongodb. This service has endpoints to get latest rate and historical rates within date range. 
+Project also includes Junit test cases for testing functionality around business logic. 
+Apache Kafka is used for managing message flows.
+
 DEPLOYMENT STEPS:
 =================
 Exchange Rate application is a J2EE web application containing various rest services.
